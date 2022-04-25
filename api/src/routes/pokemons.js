@@ -20,48 +20,37 @@ const  { name } = req.query;
 try {
     
     if( name ){//si paso 2 parametros con la misma variable me genera un array de valores
+       let lowerName= name.toLowerCase();
+       pokemonsDB = (await Pokemon.findAll({
+        where:{
+            name:name //exactamente debe tener el mimso nombre
+        },
+        order:[
+                ['name','ASC']
+        ] //ORDERNAR POR NOMBRE ASCENDENTEMENTE
+    }))
         try {
-
-            // si quiero buscar en la api
-                // pokemonsAPI=await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
-                // pAPI=[{
-                //     name:pokemonsAPI.data.name,
-                //     id:pokemonsAPI.data.id
-                // }]
-            ///
-            pokemonsDB = (await Pokemon.findAll({
-                where:{
-                    name:name //exactamente debe tener el mimso nombre
-                },
-                order:[
-                        ['name','ASC']
-                ] //ORDERNAR POR NOMBRE ASCENDENTEMENTE
-            }))
-
             
             
-            // res.send([...pAPI,...pokemonsDB]); //  junto las coincidencias de la api y la bd 
-            res.send([...pokemonsDB]); 
+            let pokemonsAPI=await axios.get(`${URL_API}${name}`);
+                pAPI=[{
+                    name:pokemonsAPI.data.name,
+                    id:pokemonsAPI.data.id
+                }]
+
+            res.send([...pAPI,...pokemonsDB]); //  junto las coincidencias de la api y la bd
         } catch (error) {
-            console.log("entre al primer catch")
-            res.status(404).send({error:"Lo siento el pokemon que intentas buscar no se encuentra o no existe - error (404)"});
 
+            
+            if( pokemonsDB.length > 0){
+                res.status(200).send([...pokemonsDB]); //  junto las coincidencias de la api y la bd
+            }
+            else{
+                console.log("entre al primer catch")
+                res.status(404).send({error:"Lo siento el pokemon que intentas buscar no se encuentra o no existe - error (404)"});
+            }
   
         }
-
-        // Promise.all(pokemonsDB)
-        // .then(async(response)=>{
-        //     const pDB = response;
-        //         res.send(pAPI);
-
-            
-        // })
-        // .catch((error)=>{
-        //     next(error)
-        //     })
-
-
-
 
     }
     else{  
@@ -72,15 +61,16 @@ try {
             .then(async(response)=>{
                 const [pAPI ,pDB] = response;
                 
-                let idPromesas=pAPI.data.results.map((poke)=>{
+                let PokesPromises=pAPI.data.results.map((poke)=>{
                     return axios.get(poke.url)
                 })
                 // console.log(idPromesas);
-                Promise.all(idPromesas).then(result=>{
-                    let pAPI_filt = result.map((poke,index)=>{
+                Promise.all(PokesPromises)
+                .then(infoPoke=>{ 
+                    let pAPI_filt =infoPoke.map((poke)=>{
                         return {
-                            name : pAPI.data.results[index].name,
-                            id: poke.data.id
+                            name : poke.data.name,//agarro el name desde la url del poke
+                            id: poke.data.id//agarro el id desde la url del poke
                         }
                     })
                     
@@ -119,11 +109,40 @@ try {
    
 })
 
+router.get("/:id", async(req,res,next)=>{   
+    const { id } = req.params;
+
+    try {
+
+            const pokeDB = await Pokemon.findByPk(id)
+            
+            res.send(pokeDB)
+  
+        
+    } catch (error) {
+        try {
+            let idControlado= Number(id)// si lo que me pasan por params es un string me va a dar NAN que no es un numero
+                                        //por lo que tiraria un error mas abajo
+            const pokeApi = await axios.get(`${URL_API}${idControlado}`)
+            let pokeSend = {
+                name:pokeApi.data.name,
+                id:pokeApi.data.id
+            }
+            res.status(200).send(pokeSend);
+            
+        } catch (error) {
+            res.status(404).send("el id ingresado no corresponde a ningun pokemon  - error 404")
+        }
+    }
+
+    
+})
+
 router.post("/",async(req,res,next)=>{
     try {
         const { name } = req.body;
         const newPokemon= await Pokemon.create({
-            name: name
+            name: name.toLowerCase()
         })
         res.status(201).send(newPokemon);
     } catch (error) {
