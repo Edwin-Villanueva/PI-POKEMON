@@ -23,7 +23,7 @@ try {
        let lowerName= name.toLowerCase();
        pokemonsDB = (await Pokemon.findAll({
         where:{
-            name:name //exactamente debe tener el mimso nombre
+            name:lowerName //exactamente debe tener el mimso nombre
         },
         order:[
                 ['name','ASC']
@@ -139,8 +139,9 @@ router.get("/:id", async(req,res,next)=>{
 })
 
 router.post("/",async(req,res,next)=>{
+    const { name } = req.body;
     try {
-        const { name } = req.body;
+        
         const newPokemon= await Pokemon.create({
             name: name.toLowerCase()
         })
@@ -165,53 +166,3 @@ module.exports = router;
 
 
 
-// let pAPI_filt =pAPI.data.results.map(async(pokemon)=> {
-//     let idPoke=await axios.get(pokemon.url).then(result=>{
-//             return result;
-//         })//guardo el id que esta dentro de la url
-//     return {
-        
-//         name:pokemon.name,
-//         id : idPoke.data.id
-        
-//     }
-    
-// } );
-// let pDB_filt =pDB.map((pokemon)=> {
-//     return {
-//         id:pokemon.id,
-//         name:pokemon.name
-//     }
-// } );
-
-// if( name ){//segundo filtrado de nombre a buscar en caso que se haya proporcionado
-//     pAPI_filt=pAPI_filt.filter((pokemon)=>{
-//         return pokemon.name.toLowerCase().includes(name);
-
-//     })
-// }
-
-// let maxPokeApi=5;
-// let allPokemons=[...pDB_filt,...pAPI_filt.slice(0,maxPokeApi)];//filtro 5 dela api asi veo si se muestra de mi bd
-
-// let pokesOrd=allPokemons.sort(function (a, b) { //ordeno de menor a mayor para testear
-//     if (a.name.toLowerCase() > b.name.toLowerCase()) {//luego tengo que filtrar desde el front
-//       return 1;                             //enviando filtrados al back o filtrarlo alli
-//     }
-//     if (a.name.toLowerCase() < b.name.toLowerCase()) {
-//       return -1;
-//     }
-//     return 0;
-//   }) ;
-// if( name !== undefined ){
-//     if( gamesOrd.length === 0 ){
-//         res.send("Si no existe ningún pokemon mostrar un mensaje adecuado");
-//     }
-//     else{
-//         res.send(gamesOrd.slice(0,10));//tener cuidado por si tira error
-//     }
-
-// }
-// else{
-//    res.send(pokesOrd); 
-// }
