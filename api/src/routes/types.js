@@ -33,7 +33,8 @@ router.get("/",async(req,res,next)=>{
                     console.log("entre al else");
                     typesFilt.forEach(async(type) => {
                         await Type.create({
-                            type// si esto tira error desglosar el tipe en name y en id
+                            name:type.name,
+                            id:type.id
                         })
                     });
                     res.send(typesFilt);
