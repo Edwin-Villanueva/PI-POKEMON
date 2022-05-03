@@ -1,0 +1,6 @@
+.pokemonCard{
+    background-color: aqua;
+}
+.pokemonCard:p{
+    color: blue;
+}

@@ -1,9 +1,11 @@
-import Pokemons from "./components/Pokemons";
+import Pokemons from "./components/PokemonsPack";
+import Navbar from "./components/NavBar";
 function App() {
   return (
-    <div className="App">
+    <>
+      <Navbar/>
       <Pokemons/>
-    </div>
+    </>
   );
 }
 

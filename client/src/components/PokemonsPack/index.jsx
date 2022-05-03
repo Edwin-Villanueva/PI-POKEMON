@@ -1,7 +1,8 @@
-import Pokemon from "./pokemon";
+import Pokemon from "../PokemonCard/pokemon";
 import { useEffect } from "react";
 import { getPokemons } from "../../redux/actions";
 import { connect } from 'react-redux';
+import styles from "./pokemonsPack.module.css"
 
 
 function Pokemons({ pokemons ,getPokemons}) {
@@ -11,7 +12,7 @@ function Pokemons({ pokemons ,getPokemons}) {
     },[])
 
     return (
-        <div className="pokemonsPack"> 
+        <div className={styles.pokemonsPack}>
                 {
                     pokemons.map((pokemon)=>{
                         return  <Pokemon key={pokemon.id} {...pokemon}/>
