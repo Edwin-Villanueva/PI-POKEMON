@@ -1,5 +1,5 @@
 import axios from "axios"
-import { GET_POKEMONS , GET_TYPES , GET_FROM } from "./actionTypes"
+import { GET_POKEMONS , GET_TYPES , GET_FROM ,GET_POKEMON_NAME ,ERROR } from "./actionTypes"
 
 export function getPokemons(){
     
@@ -29,4 +29,22 @@ export function getPokemonsFrom(from){
         payload:from
     })
     
+}
+
+export function getPokemonName(name){
+    return async (dispatch)=> {
+        try {
+            let poke = await axios.get(`http://localhost:3001/pokemons?name=${name}`);
+            dispatch({
+                type: GET_POKEMON_NAME,
+                payload: poke.data
+            });
+        } catch (error) {
+            let errorMod={name:error.response.data.error,state:true}
+            dispatch({
+                type:ERROR,
+                payload:errorMod
+            })
+        }
+    }
 }

@@ -5,13 +5,21 @@ import { connect } from 'react-redux';
 import styles from "./pokemonsPack.module.css"
 
 
-function Pokemons({ pokemons ,getPokemons}) {
+function Pokemons({ pokemons ,getPokemons ,error}) {
    
     useEffect(()=>{
         getPokemons();
     },[])
 
-    return (
+    return error.state?
+        <div className={styles.pokemonsPack}>
+            {
+                <h2>{error.name}</h2>
+            }
+
+        </div>
+    
+    :(
         <div className={styles.pokemonsPack}>
                 {
                     pokemons.map((pokemon)=>{
@@ -20,12 +28,14 @@ function Pokemons({ pokemons ,getPokemons}) {
                 }
 
         </div>
-    )
+    )   ;
 }
 
 function mapStateToProps(state){
   return {
-    pokemons : state.pokemons
+    pokemons : state.pokemons,
+    error : state.error
+
   }
 }
 

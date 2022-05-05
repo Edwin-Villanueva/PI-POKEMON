@@ -1,6 +1,9 @@
 import Types from "../SelectTypes"
 import SearchBar from "../SearchBar"
 import PokemonsFrom from "../SelectPokemons/SelectFrom"
+import Refresh from "../Refresh"
+import OrderByName from "../OrderByName"
+import OrderByStr from "../OrderByStr"
 export default function Navbar(){
     return (
 
@@ -8,7 +11,9 @@ export default function Navbar(){
         <SearchBar/>
         <Types/>
         <PokemonsFrom/>
-  
+        <OrderByName/>
+        <OrderByStr/>
+        <Refresh/>
     </nav>
 
   )
