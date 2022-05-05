@@ -2,12 +2,14 @@
     background-color: green;
     height: auto;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 .pokemonsPack div{
     margin: 10px;
     text-align: center;
-    width: 100px;
+    height: 200px;
+    width: 200px;
     border: 1px solid black;
 }

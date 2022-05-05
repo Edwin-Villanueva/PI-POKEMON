@@ -1,6 +1,11 @@
 .pokemonCard{
     background-color: aqua;
 }
-.pokemonCard:p{
-    color: blue;
+.pokemonCard p{
+    color: red;
+}
+.pokemonCard img{
+    width: 100px;
+    height: 100px;
+    object-fit:contain
 }

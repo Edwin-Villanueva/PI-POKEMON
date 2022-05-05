@@ -3,7 +3,7 @@ export default function OrderByStr(){
 
     return(
         <div>
-            <span>OrdenarPorFuerza</span>
+            <span>OrdenarPorAtaque</span>
             <select name="" id="">
                 <option value="">seleccionar</option>
                 <option value="">ascendente</option>

@@ -33,10 +33,21 @@ try {
             
             
             let pokemonsAPI=await axios.get(`${URL_API}${name}`);
-                pAPI=[{
-                    name:pokemonsAPI.data.name,
-                    id:pokemonsAPI.data.id
-                }]
+                pAPI=[
+                    {
+                        name : pokemonsAPI.data.name,//agarro el name desde la url del poke
+                        id: pokemonsAPI.data.id,//agarro el id desde la url del poke
+                        hp: pokemonsAPI.data.stats[0].base_stat,
+                        attack:pokemonsAPI.data.stats[1].base_stat,
+                        defense:pokemonsAPI.data.stats[2].base_stat,
+                        speed:pokemonsAPI.data.stats[5].base_stat,
+                        heigth:pokemonsAPI.data.heigth,
+                        weight:pokemonsAPI.data.weight,
+                        img1:pokemonsAPI.data.sprites.front_default,
+                        img2:pokemonsAPI.data.sprites.other.dream_world.front_default,
+                        gif:pokemonsAPI.data.sprites.versions["generation-v"]["black-white"].animated.front_default
+                    }
+            ]
 
             res.send([...pAPI,...pokemonsDB]); //  junto las coincidencias de la api y la bd
         } catch (error) {
@@ -70,7 +81,17 @@ try {
                     let pAPI_filt =infoPoke.map((poke)=>{
                         return {
                             name : poke.data.name,//agarro el name desde la url del poke
-                            id: poke.data.id//agarro el id desde la url del poke
+                            id: poke.data.id,//agarro el id desde la url del poke
+                            hp: poke.data.stats[0].base_stat,
+                            attack:poke.data.stats[1].base_stat,
+                            defense:poke.data.stats[2].base_stat,
+                            speed:poke.data.stats[5].base_stat,
+                            heigth:poke.data.heigth,
+                            weight:poke.data.weight,
+                            types:poke.data.types.map(poke=>poke.type.name),
+                            img1:poke.data.sprites.front_default,
+                            img2:poke.data.sprites.other.dream_world.front_default,
+                            gif:poke.data.sprites.versions["generation-v"]["black-white"].animated.front_default
                         }
                     })
                     
@@ -82,20 +103,20 @@ try {
                             id:pokemon.id
                         }
                     } );
-                    let maxPokeApi=5;
+                    let maxPokeApi=40;
                     let allPokemons=[...pDB_filt,...pAPI_filt.slice(0,maxPokeApi)];//filtro 5 dela api asi veo si se muestra de mi bd
 
-                    let pokesOrd=allPokemons.sort(function (a, b) { //ordeno de menor a mayor SOLO para VISUALIZAR
-                        if (a.name.toLowerCase() > b.name.toLowerCase()) {//luego tengo que filtrar desde el front
-                        return 1;                             //enviando filtrados al back o filtrarlo alli SEGUN
-                                                            //COMO SE QUIERA
-                        }
-                        if (a.name.toLowerCase() < b.name.toLowerCase()) {
-                        return -1;
-                        }
-                        return 0;
-                    }) ;
-                    res.send(pokesOrd); 
+                    // let pokesOrd=allPokemons.sort(function (a, b) { //ordeno de menor a mayor SOLO para VISUALIZAR
+                    //     if (a.name.toLowerCase() > b.name.toLowerCase()) {//luego tengo que filtrar desde el front
+                    //     return 1;                             //enviando filtrados al back o filtrarlo alli SEGUN
+                    //                                         //COMO SE QUIERA
+                    //     }
+                    //     if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                    //     return -1;
+                    //     }
+                    //     return 0;
+                    // }) ;
+                    res.send(allPokemons); 
                     
 
                 })
