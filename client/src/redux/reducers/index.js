@@ -1,10 +1,11 @@
-import { GET_POKEMONS , GET_TYPES , GET_FROM , GET_POKEMON_NAME, ERROR } from "../actions/actionTypes"
+import { GET_POKEMONS , GET_TYPES , GET_FROM , GET_POKEMON_NAME, ERROR ,SET_PAGE} from "../actions/actionTypes"
 const errorDefault={name:"",state:false}
 const initialState = {
     pokemons:[],
     types:[],
     pokemonsRespaldo:[],
-    error:errorDefault
+    error:errorDefault,
+    page:1,
 }
 const reducer=(state=initialState,action)=>{
     switch (action.type) {
@@ -44,6 +45,10 @@ const reducer=(state=initialState,action)=>{
             }
             case ERROR :{
                 return{...state,error:action.payload}
+            }
+
+            case SET_PAGE:{
+                return {...state,page:action.payload}
             }
 
         default: return state;

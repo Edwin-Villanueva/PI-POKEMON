@@ -1,5 +1,5 @@
 import axios from "axios"
-import { GET_POKEMONS , GET_TYPES , GET_FROM ,GET_POKEMON_NAME ,ERROR } from "./actionTypes"
+import { SET_PAGE, GET_POKEMONS , GET_TYPES , GET_FROM ,GET_POKEMON_NAME ,ERROR } from "./actionTypes"
 
 export function getPokemons(){
     
@@ -47,4 +47,11 @@ export function getPokemonName(name){
             })
         }
     }
+}
+
+export function setPage(page){
+    return ({
+      type: SET_PAGE,
+      payload: page, 
+    })
 }

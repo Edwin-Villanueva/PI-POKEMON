@@ -3,10 +3,11 @@ import { useEffect } from "react";
 import { getPokemons } from "../../redux/actions";
 import { connect } from 'react-redux';
 import styles from "./pokemonsPack.module.css"
+import { pokeForPage } from "../Pagination"
 
 
-function Pokemons({ pokemons ,getPokemons ,error}) {
-   
+function Pokemons({ page,pokemons,getPokemons ,error}) {
+
     useEffect(()=>{
         getPokemons();
     },[])
@@ -22,11 +23,12 @@ function Pokemons({ pokemons ,getPokemons ,error}) {
     :(
         <div className={styles.pokemonsPack}>
                 {
-                    pokemons.map((pokemon)=>{
+                    pokemons
+                    .slice((page-1)* pokeForPage    ,      (page-1) * pokeForPage + pokeForPage )
+                    .map((pokemon,i)=>{
                         return  <Pokemon key={pokemon.id} {...pokemon}/>
                     })
                 }
-
         </div>
     )   ;
 }
@@ -34,7 +36,8 @@ function Pokemons({ pokemons ,getPokemons ,error}) {
 function mapStateToProps(state){
   return {
     pokemons : state.pokemons,
-    error : state.error
+    error : state.error,
+    page : state.page,
 
   }
 }
