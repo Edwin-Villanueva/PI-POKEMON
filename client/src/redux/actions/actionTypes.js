@@ -4,3 +4,4 @@ export const GET_FROM="GET_FROM";
 export const GET_POKEMON_NAME = "GET_POKEMON_NAME"
 export const ERROR = "ERROR"
 export const SET_PAGE = "SET_PAGE"
+export const CHANGE_TYPE="CHANGE_TYPE"

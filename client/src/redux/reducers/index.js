@@ -1,6 +1,10 @@
-import { GET_POKEMONS , GET_TYPES , GET_FROM , GET_POKEMON_NAME, ERROR ,SET_PAGE} from "../actions/actionTypes"
+import { GET_POKEMONS , GET_TYPES , GET_FROM , GET_POKEMON_NAME, ERROR ,SET_PAGE, CHANGE_TYPE} from "../actions/actionTypes"
 const errorDefault={name:"",state:false}
 const initialState = {
+    currentType:"Todos",
+    currentFrom:"Todos",
+    pokemonsDB:[],
+    pokemonsAPI:[],
     pokemons:[],
     types:[],
     pokemonsRespaldo:[],
@@ -10,9 +14,17 @@ const initialState = {
 const reducer=(state=initialState,action)=>{
     switch (action.type) {
         case GET_POKEMONS:
+            let pokesDB,pokesAPI;
+            pokesDB= action.payload.filter((pokemon)=>{
+                return (typeof pokemon.id === "string" )
+            })
+            pokesAPI= action.payload.filter((pokemon)=>{
+                return (typeof pokemon.id === "number" )
+             })
             
             return {
-                ...state,pokemonsRespaldo:action.payload,error:errorDefault,pokemons:action.payload
+                ...state,pokemonsDB:pokesDB,pokemonsAPI:pokesAPI,
+                pokemonsRespaldo:action.payload,error:errorDefault,pokemons:action.payload
             }
         case GET_TYPES:
             return {
@@ -23,33 +35,108 @@ const reducer=(state=initialState,action)=>{
                     let filter
                     switch (action.payload) {
                         
-                        case "DB": 
-                            filter= state.pokemonsRespaldo.filter((pokemon)=>{
-                                return (typeof pokemon.id === "string" )
-                            })
-                            return {...state,error:errorDefault,pokemons:filter}
+                        case "DB":
+                            if(state.currentType === "Todos"){
+                                filter=state.pokemonsDB
+                            }
+                            else{
+                                filter = state.pokemonsDB.filter((pokemon)=>{
+                                    if(pokemon.types !== undefined){
+                                        return pokemon.types.includes(state.currentType)
+                                    }
+                                    else{
+                                        return false;
+                                    }
+                                })
+                            }
+                            
+                            return {...state,currentFrom:"DB",error:errorDefault,pokemons:filter}
 
                             
                         case "API":
-                            filter= state.pokemonsRespaldo.filter((pokemon)=>{
-                                return (typeof pokemon.id === "number" )
-                             })
-                            return {...state,error:errorDefault,pokemons:filter}
-                        default :return {...state,error:errorDefault,pokemons:state.pokemonsRespaldo}
+                            if(state.currentType === "Todos"){
+                                filter=state.pokemonsAPI
+                            }
+                            else{
+                                filter = state.pokemonsAPI.filter((pokemon)=>{
+                                    if(pokemon.types !== undefined){
+                                        return pokemon.types.includes(state.currentType)
+                                    }
+                                    else{
+                                        return false;
+                                    }
+                                })
+                            }
+                             
+                            return {...state,currentFrom:"API",error:errorDefault,pokemons:filter}
+
+                        default :{
+                            if(state.currentType === "Todos"){
+                                filter=state.pokemonsRespaldo
+                            }
+                            else{
+                                filter = state.pokemonsRespaldo.filter((pokemon)=>{
+                                    if(pokemon.types !== undefined){
+                                        return pokemon.types.includes(state.currentType)
+                                    }
+                                    else{
+                                        return false;
+                                    }
+                                })
+                            }
+                            
+                            return {...state,currentFrom:"Todos",error:errorDefault,pokemons:filter}
+                        }
                     }       
 
             }
 
-            case GET_POKEMON_NAME : {
-                return{...state,error:errorDefault,pokemons:action.payload}
+        case GET_POKEMON_NAME : {
+            return{...state,error:errorDefault,pokemons:action.payload}
+        }
+        case ERROR :{
+            return{...state,error:action.payload}
+        }
+
+        case SET_PAGE:{
+            return {...state,page:action.payload}
+        }
+        case CHANGE_TYPE :{
+            let pokesAux;
+
+            if(state.currentFrom === "API"){
+                pokesAux=state.pokemonsAPI
             }
-            case ERROR :{
-                return{...state,error:action.payload}
+            else{
+                if(state.currentFrom === "DB"){
+                    pokesAux=state.pokemonsDB;
+                }
+                else{
+                    pokesAux=state.pokemonsRespaldo
+                }
             }
 
-            case SET_PAGE:{
-                return {...state,page:action.payload}
+            
+            
+            let filter;
+            if(action.payload !== "Todos"){
+                filter = pokesAux.filter((pokemon)=>{
+                    if(pokemon.types !== undefined){
+                        return pokemon.types.includes(action.payload)
+                    }
+                    else{
+                        return false;
+                    }
+                })
+                return {...state,currentType:action.payload,pokemons:filter}
             }
+            else{
+
+                return {...state,currentType:"Todos",pokemons:pokesAux};
+            }
+                
+            
+        }
 
         default: return state;
     }

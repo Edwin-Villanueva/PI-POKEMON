@@ -1,5 +1,20 @@
 import axios from "axios"
-import { SET_PAGE, GET_POKEMONS , GET_TYPES , GET_FROM ,GET_POKEMON_NAME ,ERROR } from "./actionTypes"
+import { 
+    SET_PAGE,
+    GET_POKEMONS ,
+    GET_TYPES ,
+    GET_FROM ,
+    GET_POKEMON_NAME ,
+    ERROR,
+    CHANGE_TYPE
+    } from "./actionTypes"
+
+export function changeType(type){
+    return({
+        type:CHANGE_TYPE,
+        payload:type
+    })
+}    
 
 export function getPokemons(){
     

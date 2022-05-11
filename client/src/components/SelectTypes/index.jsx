@@ -1,10 +1,14 @@
 import { useEffect } from "react";
-import { getTypes } from "../../redux/actions";
+import { getTypes ,changeType} from "../../redux/actions";
 import { connect } from 'react-redux';
 
 
-function Types({ types ,getTypes}) {
-   
+function Types({ types ,getTypes , changeType}) {
+    function changeTypes(e){
+        console.log(e);
+
+    }
+
     useEffect(()=>{
         getTypes();
     },[])
@@ -12,8 +16,8 @@ function Types({ types ,getTypes}) {
     return (
         <div style={{marginRight:"10px"}}>
             <span>Tipos</span>
-            <select onChange={()=>{(console.log("hola"))}} >
-                <option>Todos</option>
+            <select onChange={(e)=>changeType(e.target.options[e.target.selectedIndex].text)} >
+                <option value={0}>Todos</option>
                 {types.map((type)=>{// opcion por defeault "TIPOS" 
                     return (
                         <option key={type.id} value={type.id}>{type.name} </option>
@@ -33,7 +37,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return {
-        getTypes :()=> dispatch(getTypes())
+        getTypes :()=> dispatch(getTypes()),
+        changeType :type=>dispatch(changeType(type)),
     }
 }
 
