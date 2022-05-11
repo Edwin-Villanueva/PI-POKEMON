@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 
 
 function Types({ types ,getTypes , changeType}) {
-    function changeTypes(e){
-        console.log(e);
+    // function changeTypes(e){
+    //     console.log(e);
 
-    }
+    // }
 
     useEffect(()=>{
         getTypes();

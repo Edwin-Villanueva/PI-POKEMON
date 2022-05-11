@@ -117,7 +117,13 @@ const reducer=(state=initialState,action)=>{
             }
 
             
-            
+            let pageAux;
+            if(state.page > 1){
+                pageAux=1
+            }
+            else{
+                pageAux=state.page;
+            }
             let filter;
             if(action.payload !== "Todos"){
                 filter = pokesAux.filter((pokemon)=>{
@@ -128,11 +134,11 @@ const reducer=(state=initialState,action)=>{
                         return false;
                     }
                 })
-                return {...state,currentType:action.payload,pokemons:filter}
+                return {...state,page:pageAux,currentType:action.payload,pokemons:filter}
             }
             else{
 
-                return {...state,currentType:"Todos",pokemons:pokesAux};
+                return {...state,page:pageAux,currentType:"Todos",pokemons:pokesAux};
             }
                 
             
