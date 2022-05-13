@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 
 
 function Types({ types ,getTypes , changeType}) {
-    // function changeTypes(e){
-    //     console.log(e);
-
-    // }
+     function changeT(e){
+         changeType(e.target.options[e.target.selectedIndex].text);
+         document.getElementById("byAttack").selectedIndex=0;
+         document.getElementById("byName").selectedIndex=0;
+    }
 
     useEffect(()=>{
         getTypes();
@@ -16,7 +17,7 @@ function Types({ types ,getTypes , changeType}) {
     return (
         <div style={{marginRight:"10px"}}>
             <span>Tipos</span>
-            <select onChange={(e)=>changeType(e.target.options[e.target.selectedIndex].text)} >
+            <select onChange={(e)=>changeT(e)} >
                 <option value={0}>Todos</option>
                 {types.map((type)=>{// opcion por defeault "TIPOS" 
                     return (

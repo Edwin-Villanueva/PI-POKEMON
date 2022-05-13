@@ -1,11 +1,24 @@
-import { GET_POKEMONS , GET_TYPES , GET_FROM , GET_POKEMON_NAME, ERROR ,SET_PAGE, CHANGE_TYPE} from "../actions/actionTypes"
+import {
+    GET_POKEMONS ,
+    GET_TYPES , 
+    GET_FROM , 
+    GET_POKEMON_NAME, 
+    ERROR ,
+    SET_PAGE, 
+    CHANGE_TYPE,
+    ORDER_BY_ATTACK,
+    ORDER_BY_NAME
+    } from "../actions/actionTypes"
+
 const errorDefault={name:"",state:false}
+
 const initialState = {
     currentType:"Todos",
     currentFrom:"Todos",
     pokemonsDB:[],
     pokemonsAPI:[],
     pokemons:[],
+    pokemonsFilt:[],
     types:[],
     pokemonsRespaldo:[],
     error:errorDefault,
@@ -50,7 +63,7 @@ const reducer=(state=initialState,action)=>{
                                 })
                             }
                             
-                            return {...state,currentFrom:"DB",error:errorDefault,pokemons:filter}
+                            return {...state,currentFrom:"DB",error:errorDefault,pokemons:filter,pokemonsFilt:filter}
 
                             
                         case "API":
@@ -68,7 +81,7 @@ const reducer=(state=initialState,action)=>{
                                 })
                             }
                              
-                            return {...state,currentFrom:"API",error:errorDefault,pokemons:filter}
+                            return {...state,currentFrom:"API",error:errorDefault,pokemons:filter,pokemonsFilt:filter}
 
                         default :{
                             if(state.currentType === "Todos"){
@@ -85,7 +98,7 @@ const reducer=(state=initialState,action)=>{
                                 })
                             }
                             
-                            return {...state,currentFrom:"Todos",error:errorDefault,pokemons:filter}
+                            return {...state,currentFrom:"Todos",error:errorDefault,pokemons:filter,pokemonsFilt:filter}
                         }
                     }       
 
@@ -134,13 +147,86 @@ const reducer=(state=initialState,action)=>{
                         return false;
                     }
                 })
-                return {...state,page:pageAux,currentType:action.payload,pokemons:filter}
+                return {...state,page:pageAux,currentType:action.payload,pokemons:filter,pokemonsFilt:filter}
             }
             else{
 
-                return {...state,page:pageAux,currentType:"Todos",pokemons:pokesAux};
+                return {...state,page:pageAux,currentType:"Todos",pokemons:pokesAux,pokemonsFilt:pokesAux};
             }
                 
+            
+        }
+
+        case ORDER_BY_NAME :{
+            let pokemonsAux;
+            if(state.currentType !== "Todos" || state.currentFrom !== "Todos"){
+                pokemonsAux=[...state.pokemonsFilt]
+            }
+            else{
+                pokemonsAux=[...state.pokemonsRespaldo]
+            }
+
+            let filter;
+
+            if(action.payload === "1"){//ascendente
+                filter=pokemonsAux.sort((poke1,poke2)=>{
+                    if (poke1.name < poke2.name ) {return -1;}
+                    if (poke1.name > poke2.name ) {return 1;}
+                    return 0;
+                })
+                return {...state,pokemons:filter}
+            }
+            if(action.payload === "2"){//descendente
+                filter=pokemonsAux.sort((poke1,poke2)=>{
+                    if (poke1.name < poke2.name ) {return -1;}
+                    if (poke1.name > poke2.name ) {return 1;}
+                    return 0;
+                })
+                filter.reverse()
+                return {...state,pokemons:filter}
+            }
+
+            return {...state, pokemons:pokemonsAux}
+
+            
+        }
+        case ORDER_BY_ATTACK :{
+            let pokemonsAux;
+            if(state.currentType !== "Todos" || state.currentFrom !== "Todos"){
+                pokemonsAux=[...state.pokemonsFilt]
+            }
+            else{
+                pokemonsAux=[...state.pokemonsRespaldo]
+            }
+
+            let filter;
+
+            if(action.payload === "1"){//ascendente
+                pokemonsAux=pokemonsAux.filter((poke)=>{
+                    return poke.attack !== undefined
+                })
+                filter=pokemonsAux.sort((poke1,poke2)=>{
+                    if (poke1.attack < poke2.attack ) {return -1;}
+                    if (poke1.attack > poke2.attack ) {return 1;}
+                    return 0;
+                })
+                return {...state,pokemons:filter}
+            }
+            if(action.payload === "2"){//descendente
+                pokemonsAux=pokemonsAux.filter((poke)=>{
+                    return poke.attack !== undefined
+                })
+                filter=pokemonsAux.sort((poke1,poke2)=>{
+                    if (poke1.attack < poke2.attack ) {return -1;}
+                    if (poke1.attack > poke2.attack ) {return 1;}
+                    return 0;
+                })
+                filter.reverse()
+                return {...state,pokemons:filter}
+            }
+
+            return {...state, pokemons:pokemonsAux}
+
             
         }
 

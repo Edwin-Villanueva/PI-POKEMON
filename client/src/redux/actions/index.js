@@ -6,8 +6,24 @@ import {
     GET_FROM ,
     GET_POKEMON_NAME ,
     ERROR,
-    CHANGE_TYPE
+    CHANGE_TYPE,
+    ORDER_BY_NAME,
+    ORDER_BY_ATTACK
     } from "./actionTypes"
+
+export function orderByName(order){
+    console.log(order);
+    return({
+        type:ORDER_BY_NAME,
+        payload:order
+    })
+}
+export function orderByAttack(order){
+    return({
+        type:ORDER_BY_ATTACK,
+        payload:order
+    })
+}
 
 export function changeType(type){
     return({
