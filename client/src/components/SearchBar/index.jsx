@@ -1,19 +1,23 @@
 import { connect } from "react-redux";
 import { useState } from "react";
-import { getPokemonName } from "../../redux/actions";
+import { getPokemonName,find } from "../../redux/actions";
 
-function SearchBar( {getPokemonName} ){
+function SearchBar( {getPokemonName,findAwait} ){
 
     function getPoke(e,name){
         e.preventDefault();
-        getPokemonName(name) //ME TIRA QUE NO ES UNA FUNCION WTF
+        if(name !==""){
+            findAwait()
+            getPokemonName(name.toLowerCase())
+            document.getElementById("inputSearch").value="";
+        }
     }
 
     const [name, setName] =useState("")
 
     return (
         <form style={{marginRight:"10px"}} className="form-inline" onSubmit={(e)=>getPoke(e,name)}>
-                <input placeholder="Nombre" onChange={(e)=>setName(e.target.value)}/>
+                <input id="inputSearch" placeholder="Nombre" onChange={(e)=>setName(e.target.value)}/>
                 <button style={{cursor:"pointer"}} type="submit">BuscarPokemon</button>
         </form>
     )
@@ -22,7 +26,8 @@ function SearchBar( {getPokemonName} ){
   function mapDispatchToProps(dispatch){
       
         return {
-            getPokemonName :(name)=>dispatch(getPokemonName(name))
+            getPokemonName :(name)=>dispatch(getPokemonName(name)),
+            findAwait:()=>dispatch(find())
         }
 
   }

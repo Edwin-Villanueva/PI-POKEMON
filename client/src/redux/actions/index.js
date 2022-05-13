@@ -8,9 +8,16 @@ import {
     ERROR,
     CHANGE_TYPE,
     ORDER_BY_NAME,
-    ORDER_BY_ATTACK
+    ORDER_BY_ATTACK,
+    FIND
     } from "./actionTypes"
 
+export function find(){
+    return ({
+        type:FIND,
+        payload:true
+    })
+}
 export function orderByName(order){
     console.log(order);
     return({

@@ -6,7 +6,7 @@ import styles from "./pokemonsPack.module.css"
 import { pokeForPage } from "../Pagination"
 
 
-function Pokemons({ page,pokemons,currentFrom,currentType,getPokemons ,error}) {
+function Pokemons({ page,pokemons,currentFrom,currentType,getPokemons ,error,find}) {
 
     useEffect(()=>{
         getPokemons();
@@ -19,7 +19,10 @@ function Pokemons({ page,pokemons,currentFrom,currentType,getPokemons ,error}) {
             }
 
         </div>
-    
+    :find===true?
+        <div className ={styles.pokemonsPack}>
+            <h2>{"BUSCANDO POKEMON..."}</h2>
+        </div>  
     :pokemons.length === 0 && currentFrom==="Todos" && currentType==="Todos"?
         <div className ={styles.pokemonsPack}>
             <h2>{"CARGANDO POKEMONS..."}</h2>
@@ -48,6 +51,7 @@ function mapStateToProps(state){
     page : state.page,
     currentType:state.currentType,
     currentFrom:state.currentFrom,
+    find:state.find
   }
 }
 

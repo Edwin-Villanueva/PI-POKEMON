@@ -1,3 +1,4 @@
+import { act } from "@testing-library/react"
 import {
     GET_POKEMONS ,
     GET_TYPES , 
@@ -7,7 +8,8 @@ import {
     SET_PAGE, 
     CHANGE_TYPE,
     ORDER_BY_ATTACK,
-    ORDER_BY_NAME
+    ORDER_BY_NAME,
+    FIND
     } from "../actions/actionTypes"
 
 const errorDefault={name:"",state:false}
@@ -23,9 +25,11 @@ const initialState = {
     pokemonsRespaldo:[],
     error:errorDefault,
     page:1,
+    find:false
 }
 const reducer=(state=initialState,action)=>{
     switch (action.type) {
+        case FIND : return {...state,find:action.payload}
         case GET_POKEMONS:
             let pokesDB,pokesAPI;
             pokesDB= action.payload.filter((pokemon)=>{
@@ -105,7 +109,7 @@ const reducer=(state=initialState,action)=>{
             }
 
         case GET_POKEMON_NAME : {
-            return{...state,error:errorDefault,pokemons:action.payload}
+            return{...state,find:false,error:errorDefault,pokemons:action.payload}
         }
         case ERROR :{
             return{...state,error:action.payload}

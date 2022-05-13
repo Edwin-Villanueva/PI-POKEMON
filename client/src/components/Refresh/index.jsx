@@ -1,7 +1,7 @@
 
 export default function Refresh(){
-
+    
     return (
-        <button> <a href="/">Resetear</a> </button>
+        <button > <a href="/home">Resetear</a> </button>
         )
 }
